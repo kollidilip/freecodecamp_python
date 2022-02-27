@@ -1,5 +1,7 @@
 def arithmetic_arranger(problems):
-
+    
+    # problems = ["32 + 698", "3801 - 2", "45 + 43", "123 + 49"]
+    
     # If there are too many problems supplied to the function. The limit is five, anything more will return:
     # "Error: Too many problems."
     if len(problems) >= 5:
