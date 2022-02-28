@@ -11,13 +11,12 @@ def arithmetic_arranger(problems,*args):
 
         for prob in problems:
             if ('+' in prob):
-                qsplit = prob.split('+')
-                
-                num1 = qsplit[0].strip()
-                num2 = qsplit[1].strip()
+                qsplit = prob.split('+') # split the problem with operator                
+                num1 = qsplit[0].strip() # get the first number
+                num2 = qsplit[1].strip() # get the second number
                 diffLen = max(len(num1),len(num2)) - min(len(num1),len(num2))
-
-                if len(num1) > len(num2):
+                res = int(num1) + int(num2)
+                if len(num1) > len(num2): # if first number len > second number len
                     firstLine.append('  '+num1)
                     secondLine.append('+ '+' '*diffLen+num2)
                 else:
@@ -25,31 +24,54 @@ def arithmetic_arranger(problems,*args):
                     secondLine.append('+ '+num2)
                 
                 thirdline.append('--'+'-'*max(len(num1),len(num2)))
-
+                resultLine.append(' '*(len('--'+'-'*max(len(num1),len(num2))) - len(str(res)))+str(res))
             else:
-
                 qsplit = prob.split('-')
-
                 num1 = qsplit[0].strip()
                 num2 = qsplit[1].strip()
                 diffLen = max(len(num1),len(num2)) - min(len(num1),len(num2))
-                
+                res = int(num1) - int(num2)
                 if len(num1) > len(num2):
                     firstLine.append('  '+num1)
                     secondLine.append('- '+' '*diffLen+num2)
                 else:
                     firstLine.append('  '+' '*diffLen+num1)
                     secondLine.append('- '+num2)
-
                 thirdline.append('--'+'-'*max(len(num1),len(num2)))
+                resultLine.append(' '*(len('--'+'-'*max(len(num1),len(num2))) - len(str(res)))+str(res))
+    
+    if args:
+        arranged_problems = format_output(firstLine,secondLine,thirdline,resultLine)
+    else:
+        arranged_problems = format_output(firstLine,secondLine,thirdline)
+
+    return arranged_problems
+
+def format_output(firstLine,secondLine,thirdline,*args):
+    opline1 = ''
+    opline2 = ''
+    opline3 = ''
+    opline4 = ''
+
+    for i in range(0,len(firstLine)-1):
+        opline1 = opline1 + str(firstLine[i]) + '    '
+        opline2 = opline2 + str(secondLine[i]) + '    '
+        opline3 = opline3 + str(thirdline[i]) + '    '
+    
+    opline1 = opline1 + str(firstLine[len(firstLine)-1])
+    opline2 = opline2 + str(secondLine[len(firstLine)-1])
+    opline3 = opline3 + str(thirdline[len(firstLine)-1])
 
     if args:
-        print(args)
+        resultLine = list(args)[0]
+        for i in range(0,len(resultLine)-1):
+            opline4 = opline4 + str((resultLine[i])) + '    '
+        opline4 = opline4 + str(resultLine[len(resultLine)-1])
+        return opline1+'\n'+opline2+'\n'+opline3+'\n'+opline4
     else:
-        print(firstLine,secondLine,thirdline,resultLine)
+        return opline1+'\n'+opline2+'\n'+opline3
     
 
-    return 'end'
 
 def problem_validator(problems):
     isvalid = True
