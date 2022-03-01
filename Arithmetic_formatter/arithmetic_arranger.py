@@ -1,7 +1,7 @@
 def arithmetic_arranger(problems,*args):    
 
     # problems = ["32 + 698", "3801 - 2", "45 + 43", "123 + 49"]
-    isvalid = problem_validator(problems)
+    isvalid,error_message = problem_validator(problems)
 
     if isvalid:
         firstLine = []
@@ -40,12 +40,14 @@ def arithmetic_arranger(problems,*args):
                 thirdline.append('--'+'-'*max(len(num1),len(num2)))
                 resultLine.append(' '*(len('--'+'-'*max(len(num1),len(num2))) - len(str(res)))+str(res))
     
-    if args:
-        arranged_problems = format_output(firstLine,secondLine,thirdline,resultLine)
+        if args:
+            arranged_problems = format_output(firstLine,secondLine,thirdline,resultLine)
+        else:
+            arranged_problems = format_output(firstLine,secondLine,thirdline)
+        return arranged_problems
     else:
-        arranged_problems = format_output(firstLine,secondLine,thirdline)
+        return error_message
 
-    return arranged_problems
 
 def format_output(firstLine,secondLine,thirdline,*args):
     opline1 = ''
@@ -75,11 +77,11 @@ def format_output(firstLine,secondLine,thirdline,*args):
 
 def problem_validator(problems):
     isvalid = True
-
+    error_message = ''
     # If there are too many problems supplied to the function. The limit is five, anything more will return:
     # "Error: Too many problems."
-    if len(problems) >= 5:
-        print('Error: Too many problems.')
+    if len(problems) > 5:
+        error_message = 'Error: Too many problems.'
         isvalid = False
     else:
         # The appropriate operators the function will accept are addition and subtraction.
@@ -88,37 +90,22 @@ def problem_validator(problems):
         # The error returned will be: Error: Operator must be '+' or '-'.
         for prob in problems:
             if (('+' not in prob) and ('-' not in prob)):
-                print("Error: Operator must be '+' or '-'.")
+                error_message = "Error: Operator must be '+' or '-'."
                 isvalid = False
                 break
-            else:
-                
-                # Each number (operand) should only contain digits.
-                # Otherwise, the function will return: Error: Numbers must only contain digits.
-                
-                if ('+' in prob):
-                    qsplit = prob.split('+')
-                    isvalid = check_ifnumbers(qsplit)
-                else:
-                    qsplit = prob.split('-')
-                    isvalid = check_ifnumbers(qsplit)
-        return isvalid
-
-def check_ifnumbers(qsplit):
-    is_valid = True
-    for ques_ in qsplit:
-        if not ques_.strip().isnumeric():
-            print("Error: Numbers must only contain digits.")
-            is_valid = False
-            break
-        else:
-        # Each operand (aka number on each side of the operator) has a max of four digits in width. Otherwise, the error string returned will be:
-        # Error: Numbers cannot be more than four digits.
-            if len(ques_.strip()) > 4:
-                print("Error: Numbers cannot be more than four digits.")
-                is_valid = False
+            nums = prob.split(" ")
+            # Each number (operand) should only contain digits.
+            # Otherwise, the function will return: Error: Numbers must only contain digits.
+            if not ((nums[0].strip().isnumeric()) and (nums[2].strip().isnumeric())):
+                error_message = 'Error: Numbers must only contain digits.'
+                isvalid = False                  
                 break
-    return is_valid
+            if (max(len(nums[0].strip()),len(nums[2].strip())) > 4):
+                error_message = "Error: Numbers cannot be more than four digits."
+                isvalid = False
+                break
+
+    return isvalid,error_message
             
         
  
